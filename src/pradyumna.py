@@ -5,7 +5,6 @@ __author__: yesemsanthoshkumar
 
 from pymongo import MongoClient
 import spacy
-from nltk.tree import Tree
 from py2neo import Graph, Node, Relationship
 
 mongo_python = MongoClient("mongodb://localhost//27017")
