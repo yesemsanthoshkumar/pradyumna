@@ -5,7 +5,7 @@ __author__: yesemsanthoshkumar
 
 from pymongo import MongoClient
 import spacy
-from py2neo import Graph, Node, Relationship
+from py2neo import authenticate, Graph, Node, Relationship
 
 from sentence_segmentation import sentence_segmentation
 
@@ -19,7 +19,8 @@ engine = spacy.load('en')
 
 username = input("Enter neo4j username: ")
 password = input("Enter your password: ")
-graph = Graph("http://" + username + ":" + password + "@localhost:7474")
+neo_auth = authenticate("localhost:7474", username, password)
+graph = Graph("http://localhost:7474")
 
 
 class DepTree(object):
