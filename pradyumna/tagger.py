@@ -3,26 +3,17 @@ Part of speech tagging for tokens
 """
 
 import re
+from nltk import pos_tag
 
-def tagger(token):
-    """Takes a token as input and tags it with its part of speech
+from tokenizer import word_tokenization
+
+def tagger(sentence):
+    """Takes a sentence as input and tags tokens with its part of speech
 
         Parameters
         ----------
-        token       Input word to tag for its part of speech
+        sentence       Input sentence to tag for its part of speech
     """
-    pos_regex = [
-                (r'[0-9]+[.0-9]{,1}', "NUM"),         # Numbers      ==> 32.85, 300
-                (r'am|is|was|are|were', "BVRB"),    # Be verbs,
-                (r'\w+[fl]y', "VB"),                     # Adjectives   ==> beautify
-                (r'\w+ness', "NN"),                  # Noun      ==> effectiveness
-                (r'\w+', "NN"),                      # Any word
-    ]
+    tok_sentence = word_tokenization(sentence)
 
-    for regex, tag in pos_regex:
-        if re.match(regex, token.strip()):
-            return tag
-        else:
-            continue
-
-    return "NN"
+    return pos_tag(tok_sentence)

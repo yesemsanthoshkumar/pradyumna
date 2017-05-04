@@ -9,4 +9,4 @@ def word_tokenization(sentence):
         ----------
         sentence        A string that represents a sentence in a document
     """
-    yield sentence.split(" ")
+    return sentence.split(" ")
