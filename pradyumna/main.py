@@ -7,19 +7,25 @@ from pymongo import MongoClient
 import spacy
 from py2neo import authenticate, Graph, Node, Relationship
 
+from config import CONFIG
 from sentence_segmentation import sentence_segmentation
 
-mongo_python = MongoClient("mongodb://localhost//27017")
+MG_CLIENT = MongoClient("mongodb://localhost//27017")
 
 #   Assuming the database name as news
-db = mongo_python.news
-db_collections = db.collection_names(include_system_collections=False)
+DB_NAME = CONFIG["mongodb"]["database name"]
+DB = MG_CLIENT[DB_NAME]
+if CONFIG["mongodb"]["collections"] == "SYS_COLLECTIONS":
+    COLLECTIONS = DB.collection_names(include_system_collections=False)
+else:
+    COLLECTIONS = CONFIG["mongodb"]["collections"]
 
-engine = spacy.load('en')
+ENGINE = spacy.load('en')
 
-username = input("Enter neo4j username: ")
-password = input("Enter your password: ")
-neo_auth = authenticate("localhost:7474", username, password)
+NEO_AUTH = authenticate(
+    CONFIG["neo4j"]["database url"] + ":" + CONFIG["neo4j"]["port"],
+    CONFIG["neo4j"]["username"],
+    CONFIG["neo4j"]["password"])
 graph = Graph("http://localhost:7474")
 
 
@@ -30,7 +36,7 @@ class DepTree(object):
         # A SPACY SPAN OBJECT
         self.sentence = sent
 
-    def graphCreate(self):
+    def GraphCreate(self):
         """Create graph from the sentence"""
         for chunk in self.sentence.noun_chunks:
             curr_node = Node("PHRASE", name=chunk.text)
@@ -38,11 +44,11 @@ class DepTree(object):
             rel = Relationship(curr_node, chunk.root.dep_, root_node)
             graph.create(rel)
 
-for collection in db_collections:
-    for document in db[collection].find():
+for collection in COLLECTIONS:
+    for document in DB[collection].find():
         #   Assuming the text is present in the content field of the document
         parsed_doc = sentence_segmentation(document['content'])
         for sentence in parsed_doc:
-            d_tree = DepTree(engine(sentence))
+            d_tree = DepTree(ENGINE(sentence))
             d_tree.GraphCreate()
             # print(sentence)
