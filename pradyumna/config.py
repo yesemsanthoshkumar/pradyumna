@@ -8,5 +8,3 @@ import json
 CONFIG = None
 with open("config.json", 'r') as cfg:
     CONFIG = json.load(cfg)
-
-print(CONFIG)

@@ -1,6 +1,4 @@
-"""
-Sentence segmentation for documents
-"""
+"""Sentence segmentation for documents"""
 
 
 def sentence_segmentation(paragraph):

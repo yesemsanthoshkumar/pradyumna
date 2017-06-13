@@ -1,6 +1,4 @@
-"""
-Tokenizer
-"""
+"""Tokenizer"""
 
 def word_tokenization(sentence):
     """Tokenizer function that takes a sentence and returns tokens
