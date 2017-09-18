@@ -1,7 +1,7 @@
 """Module to find tf-idf of from a set of documents"""
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-# from nltk.corpus import stopwords
+from nltk.corpus import stopwords
 
 def tf_idf(documents):
     """Computes tf-idf for the given set of documents and return the words
@@ -16,8 +16,8 @@ def tf_idf(documents):
         input=documents,
         encoding='utf-8',
         analyzer='word',
-        # stop_words=stopwords.words('english'),
+        stop_words=stopwords.words('english'),
         smooth_idf=False
     )
     sparse_mat = tf_idf_vect.fit_transform(documents)
-    return tf_idf_vect.get_feature_names(), sparse_mat
+    return sparse_mat
